@@ -8,7 +8,7 @@ export default function HomePage() {
       <div className="mb-4 bg-gray-100 p-4 m-4 rounded-lg">
         <Link
           href="https://github.com/sumin8838"
-          className="text-xl text-blue-700 font-bold"
+          className="text-xl text-yellow-900 font-bold"
         >
           github
         </Link>
