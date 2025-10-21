@@ -8,7 +8,7 @@ export default function ProfileCard() {
         gridTemplateColumns: '1fr 2fr',
         gap: '1.5rem',
         alignItems: 'center',
-        backgroundColor: '#f7f4ee',
+        backgroundColor: '#fff',
         padding: '1rem',
         borderRadius: '1rem',
       }}

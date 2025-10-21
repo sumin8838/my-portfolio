@@ -44,7 +44,7 @@ h4 {
 }
 
 a {
-  color: var(--brown-dark);
+  /* color: var(--brown-dark); */
   text-decoration: none;
 }
 
