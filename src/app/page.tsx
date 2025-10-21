@@ -9,6 +9,7 @@ export default function HomePage() {
         <Link
           href="https://github.com/sumin8838"
           className="text-xl text-yellow-900 font-bold"
+          target="blank_"
         >
           github
         </Link>
