@@ -1,3 +1,5 @@
+// src/app/project/page.tsx
+
 'use client'
 import React, { useState } from 'react'
 import ProjectCard from './project'
@@ -93,15 +95,57 @@ export default function HomePage() {
   }
 
   return (
-    <>
-      <section>
+    <div className="flex flex-col space-y-12">
+      {/* 통일된 slide-up 애니메이션 */}
+      <style>{`
+        @keyframes slideUp {
+          0% {
+            opacity: 0;
+            transform: translateY(35px);
+          }
+          100% {
+            opacity: 1;
+            transform: translateY(0);
+          }
+        }
+
+        .slide-up {
+          animation-name: slideUp;
+          animation-duration: 1800ms;
+          animation-timing-function: cubic-bezier(.16,.84,.44,1);
+          animation-fill-mode: both;
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+          .slide-up {
+            animation: none !important;
+            opacity: 1 !important;
+            transform: none !important;
+          }
+        }
+      `}</style>
+
+      {/* =========================
+          새 프로젝트 추가
+      ========================= */}
+      <section className="slide-up" style={{ animationDelay: '0ms' }}>
         <h3 className="font-bold">새 프로젝트 추가</h3>
         <AddProject onAdd={handleAddProject} />
       </section>
 
-      <section>
-        <h3 className="font-bold">예제 서비스</h3>
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+      {/* =========================
+          예제 서비스
+      ========================= */}
+      <section className="slide-up" style={{ animationDelay: '300ms' }}>
+        <h3 className="font-bold mb-4">예제 서비스</h3>
+
+        <div
+          style={{
+            display: 'flex',
+            flexDirection: 'column',
+            gap: '1rem',
+          }}
+        >
           {projects.map((p) => (
             <ProjectCard
               key={p.id}
@@ -112,6 +156,6 @@ export default function HomePage() {
           ))}
         </div>
       </section>
-    </>
+    </div>
   )
 }

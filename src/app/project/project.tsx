@@ -1,3 +1,5 @@
+// src/app/project/project.tsx
+
 'use client'
 
 interface Project {

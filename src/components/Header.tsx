@@ -39,7 +39,7 @@ export default function Header() {
                 href="/contact"
                 className="text-gray-300 hover:text-white mr-4"
               >
-                About me
+                About
               </Link>
               <Link
                 href="/project"

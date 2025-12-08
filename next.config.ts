@@ -1,7 +1,21 @@
-import type { NextConfig } from "next";
+// next.config.ts
+import type { NextConfig } from 'next'
 
 const nextConfig: NextConfig = {
-  /* config options here */
-};
+  images: {
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: 'img.clerk.com',
+        pathname: '/**',
+      },
+      {
+        protocol: 'https',
+        hostname: 'ghchart.rshah.org',
+        pathname: '/**', // 이 부분이 중요!
+      },
+    ],
+  },
+}
 
-export default nextConfig;
+export default nextConfig
