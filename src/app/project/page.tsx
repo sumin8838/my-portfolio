@@ -1,34 +1,39 @@
 // src/app/project/page.tsx
 
 'use client'
-import React, { useState } from 'react'
+
+import React, { useState, useEffect } from 'react'
 import ProjectCard from './project'
 
 interface Project {
-  id: number
+  _id: string
   title: string
   description: string
   url: string
 }
 
-function AddProject({ onAdd }: { onAdd: (p: Project) => void }) {
+// ───────────────────────────────────────────
+//   새 프로젝트 추가 컴포넌트
+// ───────────────────────────────────────────
+function AddProject({ onAdd }: { onAdd: () => void }) {
   const [title, setTitle] = useState('')
   const [description, setDescription] = useState('')
   const [url, setUrl] = useState('')
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     if (!title) return
-    const newProject: Project = {
-      id: Date.now(),
-      title,
-      description,
-      url,
-    }
-    onAdd(newProject)
+
+    await fetch('/api/projects', {
+      method: 'POST',
+      body: JSON.stringify({ title, description, url }),
+    })
+
     setTitle('')
     setDescription('')
     setUrl('')
+
+    onAdd() // DB에서 다시 불러오기
   }
 
   return (
@@ -61,42 +66,47 @@ function AddProject({ onAdd }: { onAdd: (p: Project) => void }) {
   )
 }
 
+// ───────────────────────────────────────────
+//   메인 페이지
+// ───────────────────────────────────────────
 export default function HomePage() {
-  const [projects, setProjects] = useState<Project[]>([
-    {
-      id: 1,
-      title: 'clerk-app',
-      description: 'clerk 실습에 대한 예제',
-      url: 'https://clerk-app-murex.vercel.app/',
-    },
-    {
-      id: 2,
-      title: '예제 서비스 A',
-      description: '강의 중 예제 A 설명',
-      url: 'https://example-a.vercel.app',
-    },
-  ])
+  const [projects, setProjects] = useState<Project[]>([])
 
-  const handleAddProject = (project: Project) => {
-    setProjects((prev) => [project, ...prev])
+  // DB에서 프로젝트 불러오기
+  const loadProjects = async () => {
+    const res = await fetch('/api/projects')
+    const data = await res.json()
+    setProjects(data)
   }
 
-  const handleEditProject = (id: number) => {
+  useEffect(() => {
+    loadProjects()
+  }, [])
+
+  // 수정
+  const handleEditProject = async (_id: string) => {
     const text = prompt('새 제목을 입력하세요:')
     if (!text) return
-    setProjects((prev) =>
-      prev.map((p) => (p.id === id ? { ...p, title: text } : p))
-    )
+
+    await fetch(`/api/projects/${_id}`, {
+      method: 'PATCH',
+      body: JSON.stringify({ title: text }),
+    })
+
+    loadProjects()
   }
 
-  const handleDeleteProject = (id: number) => {
+  // 삭제
+  const handleDeleteProject = async (_id: string) => {
     if (!confirm('정말 삭제하시겠습니까?')) return
-    setProjects((prev) => prev.filter((p) => p.id !== id))
+
+    await fetch(`/api/projects/${_id}`, { method: 'DELETE' })
+    loadProjects()
   }
 
   return (
     <div className="flex flex-col space-y-12">
-      {/* 통일된 slide-up 애니메이션 */}
+      {/* slide-up 애니메이션 */}
       <style>{`
         @keyframes slideUp {
           0% {
@@ -126,15 +136,15 @@ export default function HomePage() {
       `}</style>
 
       {/* =========================
-          새 프로젝트 추가
+            새 프로젝트 추가
       ========================= */}
       <section className="slide-up" style={{ animationDelay: '0ms' }}>
         <h3 className="font-bold">새 프로젝트 추가</h3>
-        <AddProject onAdd={handleAddProject} />
+        <AddProject onAdd={loadProjects} />
       </section>
 
       {/* =========================
-          예제 서비스
+            프로젝트 목록
       ========================= */}
       <section className="slide-up" style={{ animationDelay: '300ms' }}>
         <h3 className="font-bold mb-4">예제 서비스</h3>
@@ -148,7 +158,7 @@ export default function HomePage() {
         >
           {projects.map((p) => (
             <ProjectCard
-              key={p.id}
+              key={p._id}
               project={p}
               onEdit={handleEditProject}
               onDelete={handleDeleteProject}

@@ -3,7 +3,7 @@
 'use client'
 
 interface Project {
-  id: number
+  _id: string
   title: string
   description: string
   url: string
@@ -15,8 +15,8 @@ export default function ProjectCard({
   onDelete,
 }: {
   project: Project
-  onEdit: (id: number) => void
-  onDelete: (id: number) => void
+  onEdit: (id: string) => void
+  onDelete: (id: string) => void
 }) {
   return (
     <article>
@@ -26,9 +26,9 @@ export default function ProjectCard({
         {project.url}
       </a>
       <div style={{ display: 'flex', gap: '0.5rem', marginTop: '0.5rem' }}>
-        <button onClick={() => onEdit(project.id)}>Edit</button>
+        <button onClick={() => onEdit(project._id)}>Edit</button>
         <button
-          onClick={() => onDelete(project.id)}
+          onClick={() => onDelete(project._id)}
           style={{ backgroundColor: '#B22222' }}
         >
           Delete

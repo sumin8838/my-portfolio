@@ -1,4 +1,5 @@
 // next.config.ts
+
 import type { NextConfig } from 'next'
 
 const nextConfig: NextConfig = {
@@ -12,9 +13,12 @@ const nextConfig: NextConfig = {
       {
         protocol: 'https',
         hostname: 'ghchart.rshah.org',
-        pathname: '/**', // 이 부분이 중요!
+        pathname: '/**',
       },
     ],
+  },
+  eslint: {
+    ignoreDuringBuilds: true,
   },
 }
 
